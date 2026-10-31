@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhishan Katwal — Portfolio</title>
+  <meta name="description" content="Portfolio of Bhishan Katwal — Aspiring Full-Stack Web Developer, BIT student, Tribhuvan University." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            canvas: '#F4F4F5',
+            ink: '#0A0A0A',
+            muted: '#71717A',
+            border: '#E4E4E7',
+            subtle: '#A1A1AA',
+          },
+          fontSize: {
+            'display-xl': ['clamp(2.8rem, 6vw, 4.5rem)', { lineHeight: '1.05', letterSpacing: '-0.035em', fontWeight: '800' }],
+            'display-lg': ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.1', letterSpacing: '-0.03em', fontWeight: '700' }],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.shown {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Staggered children ── */
+    .reveal-stagger > * { opacity: 0; transform: translateY(24px); }
+    .reveal-stagger.shown > * {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal-stagger.shown > *:nth-child(1) { transition-delay: .05s; }
+    .reveal-stagger.shown > *:nth-child(2) { transition-delay: .12s; }
+    .reveal-stagger.shown > *:nth-child(3) { transition-delay: .19s; }
+    .reveal-stagger.shown > *:nth-child(4) { transition-delay: .26s; }
+    .reveal-stagger.shown > *:nth-child(5) { transition-delay: .33s; }
+    .reveal-stagger.shown > *:nth-child(6) { transition-delay: .40s; }
+
+    /* ── Premium card hover ── */
+    .card-premium {
+      transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s cubic-bezier(.22,1,.36,1), border-color .35s ease;
+    }
+    .card-premium:hover {
+      transform: scale(1.005) translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.06);
+      border-color: #A1A1AA;
+    }
+
+    /* ── Nav link underline ── */
+    .nav-u::after {
+      content: '';
+      display: block;
+      height: 1.5px;
+      width: 0;
+      background: #0A0A0A;
+      transition: width .35s cubic-bezier(.22,1,.36,1);
+    }
+    .nav-u:hover::after, .nav-u.active::after { width: 100%; }
+
+    /* ── Timeline ── */
+    .tl-line { position: absolute; left: 9px; top: 0; bottom: 0; width: 1.5px; background: linear-gradient(to bottom, #D4D4D8, #E4E4E7 80%, transparent); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #D4D4D8; border-radius: 99px; }
+
+    /* ── Selection ── */
+    ::selection { background: #0A0A0A; color: #F4F4F5; }
+  </style>
+</head>
+
+<body class="bg-canvas text-ink font-body antialiased">
+
+  <!-- ══════════════════════════ NAVBAR ══════════════════════════ -->
+  <header id="navbar" class="fixed inset-x-0 top-0 z-50 bg-canvas/60 backdrop-blur-2xl border-b border-transparent transition-all duration-500">
+    <div class="max-w-[1200px] mx-auto px-6 sm:px-10 flex items-center justify-between h-[72px]">
+      <a href="#hero" class="font-display text-[1.05rem] font-extrabold tracking-tight text-ink">
+        Bhishan Katwal<span class="text-subtle">.</span>
+      </a>
+
+      <!-- Desktop -->
+      <nav class="hidden md:flex items-center gap-9 text-[13px] font-medium tracking-wide text-muted uppercase">
+        <a href="#about"     class="nav-u hover:text-ink transition-colors">About</a>
+        <a href="#education" class="nav-u hover:text-ink transition-colors">Education</a>
+        <a href="#skills"    class="nav-u hover:text-ink transition-colors">Skills</a>
+        <a href="#projects"  class="nav-u hover:text-ink transition-colors">Projects</a>
+        <a href="#contact"   class="nav-u hover:text-ink transition-colors">Contact</a>
+      </nav>
+
+      <!-- Burger -->
+      <button id="burger" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] group" aria-label="Menu">
+        <span class="block w-5 h-[1.5px] bg-ink rounded-full transition-all duration-300 origin-center group-[.open]:rotate-45 group-[.open]:translate-y-[6.5px]"></span>
+        <span class="block w-5 h-[1.5px] bg-ink rounded-full transition-all duration-300 group-[.open]:opacity-0"></span>
+        <span class="block w-5 h-[1.5px] bg-ink rounded-full transition-all duration-300 origin-center group-[.open]:-rotate-45 group-[.open]:-translate-y-[6.5px]"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <nav id="mobileMenu" class="md:hidden max-h-0 overflow-hidden transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)] bg-canvas/95 backdrop-blur-2xl">
+      <div class="flex flex-col px-8 py-6 gap-5 text-[13px] font-medium tracking-wide text-muted uppercase">
+        <a href="#about"     class="mob-link hover:text-ink transition-colors">About</a>
+        <a href="#education" class="mob-link hover:text-ink transition-colors">Education</a>
+        <a href="#skills"    class="mob-link hover:text-ink transition-colors">Skills</a>
+        <a href="#projects"  class="mob-link hover:text-ink transition-colors">Projects</a>
+        <a href="#contact"   class="mob-link hover:text-ink transition-colors">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══════════════════════════ HERO ══════════════════════════ -->
+    <section id="hero" class="min-h-screen flex items-center pt-[72px]">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10 w-full py-24 md:py-0">
+        <div class="reveal max-w-[680px]">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-5">Software Developer</p>
+
+          <h1 class="font-display text-display-xl text-ink">
+            Building digital<br class="hidden sm:block" />
+            products with<br class="hidden sm:block" />
+            <span class="text-muted">precision.</span>
+          </h1>
+
+          <p class="mt-7 text-muted text-[1.05rem] leading-relaxed max-w-[520px] font-light">
+            I'm <span class="text-ink font-medium">Bhishan Katwal</span> — an aspiring full-stack web developer focused on writing clean, performant code and crafting thoughtful digital experiences.
+          </p>
+
+          <!-- CTA -->
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a href="#projects" class="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-ink text-canvas text-[13px] font-semibold tracking-wide rounded-full hover:bg-zinc-800 transition-all duration-400">
+              <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              View My Projects
+            </a>
+            <a href="#contact" class="inline-flex items-center gap-2.5 px-7 py-3.5 border border-border text-ink text-[13px] font-semibold tracking-wide rounded-full hover:border-ink transition-all duration-400">
+              <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contact Me
+            </a>
+          </div>
+
+          <!-- Socials -->
+          <div class="mt-10 flex items-center gap-5">
+            <a href="https://github.com/bhishankatwal0-eng" target="_blank" rel="noopener noreferrer" class="text-subtle hover:text-ink transition-colors duration-300" aria-label="GitHub">
+              <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58 0-.28-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.18.7.8.58A12.01 12.01 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/bhishannn/" target="_blank" rel="noopener noreferrer" class="text-subtle hover:text-ink transition-colors duration-300" aria-label="Instagram">
+              <svg class="w-[22px] h-[22px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.7.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98C23.99 15.67 24 15.26 24 12s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ ABOUT ══════════════════════════ -->
+    <section id="about" class="py-28 md:py-36 border-t border-border">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div class="reveal">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-3">About</p>
+          <h2 class="font-display text-display-lg text-ink">A bit about me</h2>
+
+          <div class="mt-14 grid md:grid-cols-5 gap-12 md:gap-20">
+            <!-- Text — 3 cols -->
+            <div class="md:col-span-3 space-y-6 text-muted text-[1.02rem] leading-[1.8] font-light">
+              <p>
+                I'm <span class="text-ink font-medium">Bhishan Katwal</span>, an Information Technology student currently pursuing my undergraduate degree under
+                <span class="text-ink font-medium">Tribhuvan University</span>. My academic journey is shaped by a deep curiosity for how software is designed, built, and scaled to solve real-world problems.
+              </p>
+              <p>
+                My core focus is mastering the full-stack web development ecosystem — from translating complex design ideas into pixel-perfect, responsive frontends to understanding the robust architecture that powers modern backends. I care deeply about writing <span class="text-ink font-medium">clean, maintainable, and scalable code</span>.
+              </p>
+              <p>
+                Outside the classroom, I sharpen my problem-solving skills through algorithmic challenges and contribute to open-source projects. I believe that continuous learning, disciplined version control, and thoughtful engineering are what separate good developers from great ones.
+              </p>
+            </div>
+
+            <!-- Facts — 2 cols -->
+            <div class="md:col-span-2">
+              <div class="border border-border rounded-2xl p-7 sm:p-8 space-y-6">
+                <p class="text-[11px] font-semibold text-subtle tracking-[.2em] uppercase">Details</p>
+                <ul class="space-y-5">
+                  <li class="flex items-start gap-4">
+                    <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-zinc-100 text-muted flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.42A12.08 12.08 0 0 1 21 17.5c0 1.38-4.03 3.5-9 3.5s-9-2.12-9-3.5a12.08 12.08 0 0 1 2.84-6.92L12 14z"/></svg>
+                    </span>
+                    <div>
+                      <p class="text-[13px] font-semibold text-ink">Education</p>
+                      <p class="text-[13px] text-muted mt-0.5">BIT — Tribhuvan University</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-4">
+                    <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-zinc-100 text-muted flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </span>
+                    <div>
+                      <p class="text-[13px] font-semibold text-ink">Location</p>
+                      <p class="text-[13px] text-muted mt-0.5">Nepal</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-4">
+                    <span class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-xl bg-zinc-100 text-muted flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </span>
+                    <div>
+                      <p class="text-[13px] font-semibold text-ink">Focus</p>
+                      <p class="text-[13px] text-muted mt-0.5">Full-Stack Web Development</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ EDUCATION ══════════════════════════ -->
+    <section id="education" class="py-28 md:py-36 border-t border-border">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div class="reveal">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-3">Education</p>
+          <h2 class="font-display text-display-lg text-ink">Academic path</h2>
+
+          <div class="mt-14 relative pl-10 sm:pl-12 max-w-[580px]">
+            <div class="tl-line"></div>
+
+            <!-- BIT -->
+            <div class="relative pb-14">
+              <span class="absolute -left-[1.6rem] sm:-left-[1.85rem] top-1.5 w-[14px] h-[14px] rounded-full bg-ink border-[3px] border-canvas shadow-[0_0_0_2px_#D4D4D8]"></span>
+              <span class="inline-block mb-2.5 px-3.5 py-1 text-[11px] font-semibold tracking-[.12em] uppercase rounded-full border border-border text-muted">2023 — Present</span>
+              <h3 class="font-display text-[1.15rem] font-bold text-ink">Bachelor of Information Technology (BIT)</h3>
+              <p class="mt-1 text-muted text-[14px] font-medium">Tribhuvan University</p>
+              <p class="mt-3 text-muted text-[14px] leading-relaxed font-light">
+                Pursuing an undergraduate degree covering software engineering, data structures &amp; algorithms, database management, computer networks, and modern web technologies. Actively building real-world projects alongside coursework.
+              </p>
+            </div>
+
+            <!-- +2 -->
+            <div class="relative pb-2">
+              <span class="absolute -left-[1.6rem] sm:-left-[1.85rem] top-1.5 w-[14px] h-[14px] rounded-full bg-zinc-300 border-[3px] border-canvas"></span>
+              <span class="inline-block mb-2.5 px-3.5 py-1 text-[11px] font-semibold tracking-[.12em] uppercase rounded-full border border-border text-subtle">Completed</span>
+              <h3 class="font-display text-[1.15rem] font-bold text-ink">Higher Secondary Education (+2)</h3>
+              <p class="mt-1 text-muted text-[14px] font-medium">Science Stream</p>
+              <p class="mt-3 text-muted text-[14px] leading-relaxed font-light">
+                Completed higher secondary studies in the Science stream, building a strong analytical foundation in mathematics, physics, and logical reasoning.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ SKILLS ══════════════════════════ -->
+    <section id="skills" class="py-28 md:py-36 border-t border-border">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div class="reveal">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-3">Skills</p>
+          <h2 class="font-display text-display-lg text-ink">Technical toolkit</h2>
+
+          <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
+
+            <!-- Core Programming -->
+            <div class="card-premium border border-border rounded-2xl p-7">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 text-muted flex items-center justify-center mb-5">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <h3 class="font-display text-[15px] font-bold text-ink">Core Programming</h3>
+              <p class="text-[12px] text-subtle mt-1 tracking-wide">Languages &amp; fundamentals</p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">C</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">C++</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">JavaScript</span>
+              </div>
+            </div>
+
+            <!-- Frontend -->
+            <div class="card-premium border border-border rounded-2xl p-7">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 text-muted flex items-center justify-center mb-5">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              </div>
+              <h3 class="font-display text-[15px] font-bold text-ink">Frontend Tools</h3>
+              <p class="text-[12px] text-subtle mt-1 tracking-wide">UI &amp; styling</p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">HTML5</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">CSS3</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">JavaScript</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">Tailwind CSS</span>
+              </div>
+            </div>
+
+            <!-- Dev Tools -->
+            <div class="card-premium border border-border rounded-2xl p-7">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 text-muted flex items-center justify-center mb-5">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <h3 class="font-display text-[15px] font-bold text-ink">Development Tools</h3>
+              <p class="text-[12px] text-subtle mt-1 tracking-wide">Workflow &amp; collaboration</p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">Git</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">GitHub</span>
+                <span class="px-3 py-1 text-[11px] font-medium rounded-full border border-border text-muted">VS Code</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ PROJECTS ══════════════════════════ -->
+    <section id="projects" class="py-28 md:py-36 border-t border-border">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div class="reveal">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-3">Projects</p>
+          <h2 class="font-display text-display-lg text-ink">Selected work</h2>
+          <p class="mt-4 text-muted text-[1.02rem] font-light max-w-[520px]">A growing collection of things I've designed and built. More work is always in progress.</p>
+
+          <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
+
+            <!-- ★ CCT Bus Tracker -->
+            <div class="card-premium flex flex-col border border-border rounded-2xl overflow-hidden">
+              <div class="w-full h-44 bg-gradient-to-br from-zinc-100 via-zinc-50 to-canvas flex items-center justify-center border-b border-border">
+                <svg class="w-12 h-12 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="13" rx="2"/><path d="M7 19h10"/><path d="M8 16v3"/><path d="M16 16v3"/><circle cx="8" cy="9" r="1.5" fill="currentColor" stroke="none"/><circle cx="16" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M3 12h18"/></svg>
+              </div>
+              <div class="flex flex-col flex-grow p-6">
+                <h3 class="font-display text-[15px] font-bold text-ink">CCT Bus Tracker</h3>
+                <p class="mt-2 text-[13px] text-muted leading-relaxed flex-grow">A real-time campus bus tracking application helping students locate buses, view routes, and check estimated arrival times for CCT transit.</p>
+                <div class="mt-4 flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">HTML5</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">CSS3</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">JavaScript</span>
+                </div>
+                <div class="mt-5 flex gap-3">
+                  <a href="https://github.com/bhishankatwal0-eng" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Code
+                  </a>
+                  <a href="#" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Portfolio Site -->
+            <div class="card-premium flex flex-col border border-border rounded-2xl overflow-hidden">
+              <div class="w-full h-44 bg-gradient-to-br from-zinc-100 via-zinc-50 to-canvas flex items-center justify-center border-b border-border">
+                <svg class="w-12 h-12 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="flex flex-col flex-grow p-6">
+                <h3 class="font-display text-[15px] font-bold text-ink">Personal Portfolio</h3>
+                <p class="mt-2 text-[13px] text-muted leading-relaxed flex-grow">A minimalist, fully responsive portfolio website built with semantic HTML, Tailwind CSS utility classes, and vanilla JavaScript — you're viewing it now.</p>
+                <div class="mt-4 flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">HTML5</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">Tailwind</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">JS</span>
+                </div>
+                <div class="mt-5 flex gap-3">
+                  <a href="https://github.com/bhishankatwal0-eng" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Code
+                  </a>
+                  <a href="#" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Full-Stack App -->
+            <div class="card-premium flex flex-col border border-border rounded-2xl overflow-hidden">
+              <div class="w-full h-44 bg-gradient-to-br from-zinc-100 via-zinc-50 to-canvas flex items-center justify-center border-b border-border">
+                <svg class="w-12 h-12 text-zinc-300" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+              </div>
+              <div class="flex flex-col flex-grow p-6">
+                <h3 class="font-display text-[15px] font-bold text-ink">Full-Stack Web App</h3>
+                <p class="mt-2 text-[13px] text-muted leading-relaxed flex-grow">A dynamic full-stack application featuring user authentication, RESTful APIs, and CRUD operations — currently under active development.</p>
+                <div class="mt-4 flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">Node.js</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">Express</span>
+                  <span class="px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full border border-border text-subtle">MongoDB</span>
+                </div>
+                <div class="mt-5 flex gap-3">
+                  <a href="#" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Code
+                  </a>
+                  <a href="#" class="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-semibold tracking-wide rounded-full border border-border text-muted hover:border-ink hover:text-ink transition-all duration-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ CONTACT ══════════════════════════ -->
+    <section id="contact" class="py-28 md:py-36 border-t border-border">
+      <div class="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div class="reveal">
+          <p class="font-body text-subtle text-[13px] tracking-[.2em] uppercase mb-3">Contact</p>
+          <h2 class="font-display text-display-lg text-ink">Get in touch</h2>
+          <p class="mt-4 text-muted text-[1.02rem] font-light max-w-[520px]">Have an idea, want to collaborate, or just want to say hello? I'd love to hear from you.</p>
+
+          <div class="mt-14 grid md:grid-cols-2 gap-14 md:gap-20">
+
+            <!-- Links -->
+            <div class="space-y-6">
+              <a href="mailto:bhishankatwal0@gmail.com" class="flex items-center gap-5 group">
+                <span class="flex-shrink-0 w-12 h-12 rounded-xl border border-border text-muted flex items-center justify-center group-hover:border-ink group-hover:text-ink transition-all duration-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </span>
+                <div>
+                  <p class="text-[13px] font-semibold text-ink">Email</p>
+                  <p class="text-[13px] text-muted group-hover:text-ink transition-colors">bhishankatwal0@gmail.com</p>
+                </div>
+              </a>
+              <a href="https://github.com/bhishankatwal0-eng" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 group">
+                <span class="flex-shrink-0 w-12 h-12 rounded-xl border border-border text-muted flex items-center justify-center group-hover:border-ink group-hover:text-ink transition-all duration-400">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58 0-.28-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.18.7.8.58A12.01 12.01 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                </span>
+                <div>
+                  <p class="text-[13px] font-semibold text-ink">GitHub</p>
+                  <p class="text-[13px] text-muted group-hover:text-ink transition-colors">bhishankatwal0-eng</p>
+                </div>
+              </a>
+              <a href="https://www.instagram.com/bhishannn/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-5 group">
+                <span class="flex-shrink-0 w-12 h-12 rounded-xl border border-border text-muted flex items-center justify-center group-hover:border-ink group-hover:text-ink transition-all duration-400">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.7.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98C23.99 15.67 24 15.26 24 12s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg>
+                </span>
+                <div>
+                  <p class="text-[13px] font-semibold text-ink">Instagram</p>
+                  <p class="text-[13px] text-muted group-hover:text-ink transition-colors">@bhishannn</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Form -->
+            <form action="https://formspree.io/f/your-form-id" method="POST" class="space-y-5">
+              <div>
+                <label for="name" class="block text-[12px] font-semibold text-muted tracking-wide uppercase mb-2">Name</label>
+                <input type="text" id="name" name="name" required placeholder="Your name"
+                  class="w-full px-5 py-3.5 rounded-xl border border-border bg-transparent text-[14px] text-ink placeholder-subtle outline-none focus:border-ink transition-colors duration-400" />
+              </div>
+              <div>
+                <label for="email" class="block text-[12px] font-semibold text-muted tracking-wide uppercase mb-2">Email</label>
+                <input type="email" id="email" name="email" required placeholder="you@example.com"
+                  class="w-full px-5 py-3.5 rounded-xl border border-border bg-transparent text-[14px] text-ink placeholder-subtle outline-none focus:border-ink transition-colors duration-400" />
+              </div>
+              <div>
+                <label for="message" class="block text-[12px] font-semibold text-muted tracking-wide uppercase mb-2">Message</label>
+                <textarea id="message" name="message" rows="4" required placeholder="Write your message…"
+                  class="w-full px-5 py-3.5 rounded-xl border border-border bg-transparent text-[14px] text-ink placeholder-subtle outline-none focus:border-ink transition-colors duration-400 resize-none"></textarea>
+              </div>
+              <button type="submit"
+                class="inline-flex items-center gap-2.5 px-7 py-3.5 bg-ink text-canvas text-[13px] font-semibold tracking-wide rounded-full hover:bg-zinc-800 transition-all duration-400">
+                <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Message
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
+  <footer class="border-t border-border">
+    <div class="max-w-[1200px] mx-auto px-6 sm:px-10 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[13px] text-subtle font-light">&copy; 2026 Bhishan Katwal. All rights reserved.</p>
+      <a href="#hero" class="group inline-flex items-center gap-2.5 text-[13px] text-subtle hover:text-ink transition-colors duration-400">
+        Back to top
+        <span class="w-9 h-9 rounded-full border border-border flex items-center justify-center group-hover:border-ink transition-all duration-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        </span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════ JS ══════════════════════════ -->
+  <script>
+    /* ── Mobile menu ── */
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      mobileMenu.style.maxHeight = mobileMenu.style.maxHeight ? null : mobileMenu.scrollHeight + 'px';
+    });
+    document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.style.maxHeight = null;
+    }));
+
+    /* ── Navbar border on scroll ── */
+    const navbar = document.getElementById('navbar');
+    const onScroll = () => {
+      navbar.classList.toggle('border-border', window.scrollY > 20);
+      navbar.classList.toggle('border-transparent', window.scrollY <= 20);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ── Reveal observer ── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+    /* ── Active nav tracking ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-u');
+    const track = () => {
+      const y = window.scrollY + 140;
+      sections.forEach(s => {
+        const link = document.querySelector(`.nav-u[href="#${s.id}"]`);
+        if (link) link.classList.toggle('active', y >= s.offsetTop && y < s.offsetTop + s.offsetHeight);
+      });
+    };
+    window.addEventListener('scroll', track, { passive: true });
+    track();
+  </script>
+
+</body>
+</html>
